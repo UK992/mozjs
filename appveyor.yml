@@ -5,7 +5,7 @@ environment:
   TARGET: 'nightly-x86_64-pc-windows-msvc'
 
 install:
-  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
+  #- cmd: call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
   - ps: Start-FileDownload "https://dl.dropboxusercontent.com/u/25971865/msvc-deps/moztools-0.0.1-4.zip"
   - 7z x moztools-0.0.1-4.zip
   - set "MOZTOOLS_PATH=%APPVEYOR_BUILD_FOLDER%\moztools-0.0.1-4\bin"
