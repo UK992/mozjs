@@ -14,6 +14,16 @@ install:
   - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-${env:TARGET}.exe" -FileName "rust-install.exe"
   - ps: .\rust-install.exe /VERYSILENT /NORESTART /DIR="C:\rust" | Out-Null
   - ps: $env:PATH="$env:PATH;C:\rust\bin"
+  # Setup CL_CACHE
+  - ps: Start-FileDownload "https://dl.dropboxusercontent.com/u/25971865/msvc-deps/clcache.zip"
+  - 7z x clcache.zip
+  - cmd: IF EXIST %APPVEYOR_BUILD_FOLDER%\clcache-3.2.0 ECHO clcache-3.2.0 exist.
+  - set "MSVC_BIN=C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\"
+  - cmd: MOVE "%MSVC_BIN%cl.exe" "%MSVC_BIN%cl_original.exe"
+  - cmd: MOVE "%MSVC_BIN%cl.exe.config" "%MSVC_BIN%cl_original.exe.config"
+  - cmd: MOVE "%APPVEYOR_BUILD_FOLDER%\clcache.exe" "%MSVC_BIN%cl.exe"
+  - set "CLCACHE_CL=%MSVC_BIN%cl_original.exe"
+  - cl -s
 
 # Uncomment these lines to expose RDP access information to the build machine in the build log.
 #init:
@@ -24,5 +34,6 @@ install:
 
 build_script:
   - cargo build -v
+  - cl -s
 
 test: off
